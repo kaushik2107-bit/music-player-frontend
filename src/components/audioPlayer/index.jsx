@@ -1,5 +1,6 @@
 import { GrRotateLeft, GrRotateRight } from "react-icons/gr"
-import { BsPlayFill, BsPauseFill } from "react-icons/bs"
+import { BsPlayFill, BsPauseFill, BsVolumeUpFill, BsFillVolumeMuteFill } from "react-icons/bs"
+import { RxLoop } from "react-icons/rx"
 import { useState, useRef, useEffect } from "react"
 import Slider from "react-input-slider"
 
@@ -10,6 +11,8 @@ export default function AudioPlayer(props) {
   const [state, setState] = useState({ x: 0, y: 0 });
   const [duration, setDuration] = useState(0)
   const [currentTime, setCurrentTime] = useState(0)
+  const [volume, setVolume] = useState({ x: 100, y: 0 });
+
 
   const audioPlayer = useRef()
   const progressBar = useRef()
@@ -69,16 +72,82 @@ export default function AudioPlayer(props) {
 
   useEffect(() => {},[duration])
 
+  const handleMute = () => {
+    if (volume.x === 0) {
+      setVolume(state => ({...state, x: 20}))
+      audioPlayer.current.volume = 20/100
+    } else {
+      setVolume(state => ({...state, x: 0}))
+      audioPlayer.current.volume = 0/100
+    }
+  }
+
+  useEffect(() => {
+    setIsPlaying(true)
+    audioPlayer.current.play()
+    animationRef.current = requestAnimationFrame(whilePlaying)
+  }, [props.link])
+
   return (
     <div className="">
-      <audio ref={audioPlayer} src={audio} autoPlay />
+      <audio ref={audioPlayer} src={audio} autoPlay loop={props.loop} />
 
       <div className="flex justify-center items-center">
-        <button className="border-[1px] m-2 bg-white p-[1px] px-2 flex items-center justify-center cursor-pointer rounded-[50%] w-10 h-10" onClick={backThirty}><GrRotateLeft /></button>
-        <button className="border-[1px] m-2 bg-white p-[1px] px-2 cursor-pointer rounded-[50%] w-14 h-14 flex items-center justify-center" onClick={toggePlayPause}>
-          {isPlaying ? <BsPauseFill className="text-[22px]" /> : <BsPlayFill className="text-[22px]" />}
-        </button>
-        <button className="border-[1px] m-2 bg-white p-[1px] px-2 flex items-center justify-center cursor-pointer rounded-[50%] w-10 h-10" onClick={frontThirty}><GrRotateRight /></button>
+        <div className="flex-1">
+
+        </div>
+
+        <div className="flex justify-center items-center">
+          <button className="border-[1px] m-2 bg-white p-[1px] px-2 flex items-center justify-center cursor-pointer rounded-[50%] w-10 h-10" onClick={backThirty}><GrRotateLeft /></button>
+          <button className="border-[1px] m-2 bg-white p-[1px] px-2 cursor-pointer rounded-[50%] w-14 h-14 flex items-center justify-center" onClick={toggePlayPause}>
+            {isPlaying ? <BsPauseFill className="text-[22px]" /> : <BsPlayFill className="text-[22px]" />}
+          </button>
+          <button className="border-[1px] m-2 bg-white p-[1px] px-2 flex items-center justify-center cursor-pointer rounded-[50%] w-10 h-10" onClick={frontThirty}><GrRotateRight /></button>
+        </div>
+
+        <div className="flex-1 flex justify-end items-center p-2">
+          <div
+            className="flex-1 cursor-pointer"
+            onClick={() => {props.setLoop(prev => !prev)}}
+          >
+            <RxLoop
+              className="text-[25px] text-[#bbb]"
+              style={props.loop ? {color: "green"} : {color: "#bbb"}}
+            />
+          </div>
+          {volume.x === 0 ?
+            <BsFillVolumeMuteFill
+              className="text-[#bbb] text-[25px] m-[6px] cursor-pointer"
+              onClick={handleMute}
+            />
+            :
+            <BsVolumeUpFill
+              className="text-[#bbb] text-[25px] m-[6px] cursor-pointer"
+              onClick={handleMute}
+            />
+          }
+          <Slider
+            axis="x"
+            x={volume.x}
+            onChange={({ x }) => {
+              setVolume(state => ({...state, x}))
+              audioPlayer.current.volume = x/100
+            }}
+            styles={{
+              active: {
+                backgroundColor: "#569160"
+              },
+              track: {
+                width: "80px",
+                height: "4px",
+              },
+              thumb: {
+                width: "12px",
+                height: "12px"
+              }
+            }}
+          />
+        </div>
       </div>
 
       <div className="flex">
@@ -100,12 +169,12 @@ export default function AudioPlayer(props) {
             },
             track: {
               width: "70vw",
+              height: "5px",
               backgroundColor: "#555"
             },
             thumb: {
-              active: {
-                backgroundColor: "black"
-              }
+              width: "12px",
+              height: "12px"
             }
           }}
         />
