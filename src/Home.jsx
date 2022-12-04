@@ -4,6 +4,7 @@ import AudioPlayer from "./components/audioPlayer/index"
 import { BsPlayFill } from "react-icons/bs"
 import logo from "./assets/logo.png"
 import Navbar from "./components/navbar/index"
+import Liked from "./components/liked/index"
 
 function Home() {
   const [latestSongs, setLatestSongs] = useState({
@@ -70,47 +71,12 @@ function Home() {
     }
   }, [search])
 
-  return (
-    <div className="bg-[#333] w-[100vw] h-[calc(100vh-150px)] flex "  >
-      <div className="w-[250px] bg-[#111] h-[100%]">
-        <div className="w-[50%] m-auto h-[100px] bg-contain bg-no-repeat bg-center" style={{backgroundImage: `url(${logo})`}} />
-        <Navbar />
-      </div>
-      <div className="w-[calc(100vw-250px)] overflow-scroll">
-        <div className="m-2">
-          <input
-            placeholder={"Let's find your song"}
-            onFocus={()=> setFocus(true)}
-            type="text"
-            value={search}
-            onChange={handleChange}
-            className="w-96 h-8 rounded-2xl m-2 p-2 placeholder:text-[12px] p-4 bg-[#777] placeholder:text-[#ddd] text-[#eee] outline-none"
-          />
-          <div onFocus={() => setFocus(true)} style={focus ? { boxShadow: "0 20px 40px 10px #222" } : {display: "none"}} className="fixed z-10 w-fit max-h-[345px] overflow-scroll rounded-xl bg-[#222] border-y-8 border-[#222]">
-            {image.length ? <div className="w-96 px-2 mx-2 flex text-[#777] text-[12px] mt-2">
-              <p className="flex-1">{image.length} results</p>
-              <p className="cursor-pointer hover:text-white" onClick={() => setFocus(false)}>Hide</p>
-            </div> : <></>}
-            {image.map((item, index) => {
-              return (
-                <div key={index} className="w-96 h-[70px] bg-[#333] m-2 rounded-xl p-[5px] flex">
-                  <div className="w-[60px] h-[60px] rounded-md" style={{backgroundImage: `url(${item})`, backgroundSize: "cover", backgroundPosition: "center"}} />
-                  <div className="flex-1 flex justify-start items-center p-2 text-[#cdd] min-w-0 flex-1 text-ellipsis overflow-hidden whitespace-nowrap">
-                    {fileName[index]}
-                  </div>
-                  <div className="cursor-pointer flex justify-center items-center text-[40px] text-[#fa5056]" onClick={() => fetchTrack(item, track[index], fileName[index])}><BsPlayFill /></div>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-
+  const HomeComponent = () => {
+    return (
+      <>
         <div className="m-2 p-2 text-[18px] font-normal text-[#ddd]">
           Recently Added
         </div>
-
-
-
         <div className="m-2 p-2 flex overflow-hidden flex-wrap gap-4 h-[240px]">
           {
             latestSongs.image.map((item, index) => {
@@ -127,8 +93,59 @@ function Home() {
             })
           }
         </div>
+      </>
+    )
+  }
+
+  const [navLink, setNavLink] = useState(1)
+  return (
+    <div className="bg-[#333] w-[100vw] h-[calc(100vh-150px)] flex "  >
+      <div className="w-[250px] bg-[#111] h-[100%]">
+        <div className="w-[50%] m-auto h-[100px] bg-contain bg-no-repeat bg-center" style={{backgroundImage: `url(${logo})`}} />
+        <Navbar setNavLink={setNavLink} />
+      </div>
+      <div className="w-[calc(100vw-250px)] overflow-scroll">
+        <div className="m-2 flex">
+          <div className="">
+            <input
+              placeholder={"Let's find your song"}
+              onFocus={()=> setFocus(true)}
+              type="text"
+              value={search}
+              onChange={handleChange}
+              className="w-96 h-8 rounded-2xl m-2 p-2 placeholder:text-[12px] p-4 bg-[#777] placeholder:text-[#ddd] text-[#eee] outline-none"
+            />
+            <div onFocus={() => setFocus(true)} style={focus ? { boxShadow: "0 20px 40px 10px #222" } : {display: "none"}} className="fixed z-10 w-fit max-h-[345px] overflow-scroll rounded-xl bg-[#222] border-y-8 border-[#222]">
+              {image.length ? <div className="w-96 px-2 mx-2 flex text-[#777] text-[12px] mt-2">
+                <p className="flex-1">{image.length} results</p>
+                <p className="cursor-pointer hover:text-white" onClick={() => setFocus(false)}>Hide</p>
+              </div> : <></>}
+              {image.map((item, index) => {
+                return (
+                  <div key={index} className="w-96 h-[70px] bg-[#333] m-2 rounded-xl p-[5px] flex">
+                    <div className="w-[60px] h-[60px] rounded-md" style={{backgroundImage: `url(${item})`, backgroundSize: "cover", backgroundPosition: "center"}} />
+                    <div className="flex-1 flex justify-start items-center p-2 text-[#cdd] min-w-0 flex-1 text-ellipsis overflow-hidden whitespace-nowrap">
+                      {fileName[index]}
+                    </div>
+                    <div className="cursor-pointer flex justify-center items-center text-[40px] text-[#fa5056]" onClick={() => fetchTrack(item, track[index], fileName[index])}><BsPlayFill /></div>
+                  </div>
+                )
+              })}
+            </div>
+          </div>
+          <div className="flex-1 flex justify-end items-center p-2 px-4">
+            <p className="text-[#bbb] text-[15px] font-bold">Hello, {JSON.parse(localStorage.getItem("muzic")) && JSON.parse(localStorage.getItem("muzic")).name.split(" ")[0]} </p>
+            <div className="w-[30px] h-[30px] bg-cover bg-center rounded-[50%] mx-2" style={{backgroundImage: `url(${JSON.parse(localStorage.getItem("muzic")).profilePic})`}} referrerPolicy="no-referrer" />
+          </div>
+        </div>
 
 
+        {
+          {
+            1: <HomeComponent />,
+            2: <Liked setAudioData={setAudioData} setPlay={setPlay} />
+          }[navLink]
+        }
       </div>
 
       <div className="absolute bottom-0 w-[100vw] h-[150px] flex justify-around pr-8 items-center bg-[#222]">
@@ -138,6 +155,7 @@ function Home() {
           autoPlay={play}
           loop={isLoop}
           setLoop={setIsLoop}
+          data={audioData}
         />
       </div>
     </div>

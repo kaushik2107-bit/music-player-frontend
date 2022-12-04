@@ -1,8 +1,10 @@
 import { GrRotateLeft, GrRotateRight } from "react-icons/gr"
 import { BsPlayFill, BsPauseFill, BsVolumeUpFill, BsFillVolumeMuteFill } from "react-icons/bs"
+import { AiFillHeart, AiOutlineHeart } from "react-icons/ai"
 import { RxLoop } from "react-icons/rx"
 import { useState, useRef, useEffect } from "react"
 import Slider from "react-input-slider"
+import axios from "axios"
 
 export default function AudioPlayer(props) {
   const audio = props.link
@@ -88,13 +90,46 @@ export default function AudioPlayer(props) {
     animationRef.current = requestAnimationFrame(whilePlaying)
   }, [props.link])
 
+  const [isLiked, setIsLiked] = useState(false)
+
+  const fetchLike = async() => {
+    const check = await axios.post('https://musicplayer-production-5463.up.railway.app/islike', {
+      email: JSON.parse(localStorage.getItem("muzic")).email,
+      ...props.data
+    })
+
+    setIsLiked(prev => check.data.check)
+  }
+
+  useEffect(() => {
+    fetchLike()
+  }, [props?.data])
+
+  const toggleLike = async () => {
+    const check = isLiked
+    setIsLiked(prev => !prev)
+    const block = {
+      email: JSON.parse(localStorage.getItem("muzic")).email,
+      ...props.data
+    }
+
+    if (check == false) {
+      if (props.data.image.length) await axios.post("https://musicplayer-production-5463.up.railway.app/setlike", block)
+    } else {
+      if (props.data.image.length) await axios.post("https://musicplayer-production-5463.up.railway.app/removelike", block)
+    }
+
+  }
+
   return (
     <div className="">
       <audio ref={audioPlayer} src={audio} autoPlay loop={props.loop} />
 
       <div className="flex justify-center items-center">
         <div className="flex-1">
-
+          <div className="flex justify-end text-[28px] px-4">
+            { isLiked ? <AiFillHeart className="text-[#01ff01] cursor-pointer" onClick={toggleLike} /> : <AiOutlineHeart className="cursor-pointer text-[#777]" onClick={toggleLike} /> }
+          </div>
         </div>
 
         <div className="flex justify-center items-center">

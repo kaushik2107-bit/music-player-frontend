@@ -7,6 +7,7 @@ export default function Logout({ setUserName }) {
 	const onSuccess = () => {
 		console.log("Log out successfully");
 		// setUserName()
+		localStorage.removeItem("muzic")
 		window.location = "/login"
 	}
 
