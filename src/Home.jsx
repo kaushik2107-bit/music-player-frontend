@@ -6,6 +6,7 @@ import logo from "./assets/logo.png"
 import Navbar from "./components/navbar/index"
 import Liked from "./components/liked/index"
 import NewPlaylist from "./components/newPlaylist/index"
+import DisplayPlaylist from "./components/displayPlaylist/index"
 
 function Home() {
   const [latestSongs, setLatestSongs] = useState({
@@ -97,13 +98,13 @@ function Home() {
       </>
     )
   }
-
+  const [playData, setPlayData] = useState({})
   const [navLink, setNavLink] = useState(1)
   return (
     <div className="bg-[#333] w-[100vw] h-[calc(100vh-150px)] flex "  >
       <div className="w-[250px] bg-[#111] h-[100%]">
         <div className="w-[50%] m-auto h-[100px] bg-contain bg-no-repeat bg-center" style={{backgroundImage: `url(${logo})`}} />
-        <Navbar setNavLink={setNavLink} />
+        <Navbar setNavLink={setNavLink} setPlayData={setPlayData} />
       </div>
       <div className="w-[calc(100vw-250px)] overflow-scroll">
         <div className="m-2 flex">
@@ -145,7 +146,8 @@ function Home() {
           {
             1: <HomeComponent />,
             2: <Liked setAudioData={setAudioData} setPlay={setPlay} />,
-            3: <NewPlaylist />
+            3: <NewPlaylist />,
+            4: <DisplayPlaylist playData={playData} setAudioData={setAudioData} setPlay={setPlay} />
           }[navLink]
         }
       </div>

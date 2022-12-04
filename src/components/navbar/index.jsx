@@ -5,7 +5,7 @@ import { useState, useEffect } from "react"
 import LogoutButton from "../login/logout"
 import axios from "axios"
 
-export default function Navbar({ setNavLink }) {
+export default function Navbar({ setNavLink, setPlayData }) {
   const [state, setState] = useState(1)
   const [playlist, setPlaylist] = useState([])
 
@@ -32,7 +32,7 @@ export default function Navbar({ setNavLink }) {
         {
           playlist.map((item, index) => {
             return (
-              <div className="cursor-pointer" key={index}>
+              <div className="cursor-pointer" key={index} style={state === index+4 ? {color: "#fff"} : {}} onClick={() => (setNavLink(prev => 4), setState(index + 4), setPlayData(item))}>
                 {item.name}
               </div>
             )

@@ -97,7 +97,7 @@ export default function AudioPlayer(props) {
       email: JSON.parse(localStorage.getItem("muzic")).email,
       ...props.data
     })
-
+    console.log(props.data)
     setIsLiked(prev => check.data.check)
   }
 
