@@ -5,6 +5,7 @@ import { BsPlayFill } from "react-icons/bs"
 import logo from "./assets/logo.png"
 import Navbar from "./components/navbar/index"
 import Liked from "./components/liked/index"
+import NewPlaylist from "./components/newPlaylist/index"
 
 function Home() {
   const [latestSongs, setLatestSongs] = useState({
@@ -143,7 +144,8 @@ function Home() {
         {
           {
             1: <HomeComponent />,
-            2: <Liked setAudioData={setAudioData} setPlay={setPlay} />
+            2: <Liked setAudioData={setAudioData} setPlay={setPlay} />,
+            3: <NewPlaylist />
           }[navLink]
         }
       </div>

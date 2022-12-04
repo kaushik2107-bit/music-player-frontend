@@ -49,6 +49,7 @@ export default function Login({ setStatus }) {
 //   playlists: [
 //     {
 //       name: name,
+//       cover: cover,
 //       songs: [
 //         {
 //           fileName: fileName,
