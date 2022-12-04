@@ -5,14 +5,16 @@ import LogoutButton from "./logout"
 
 const clientId = "814240228633-17qg9i62sljgr64e30jbr585fug81rpj.apps.googleusercontent.com"
 
-export default function Login() {
+export default function Login({ setStatus }) {
   const [userName, setUserName] = useState()
   useEffect(() => {
     const start = () => {
-      gapi.auth2.init({
+      const auth2 = gapi.auth2.init({
         clientId: clientId,
         scope: ""
       })
+
+      setStatus(auth2.isSignedIn.le)
     }
 
     gapi.load('client:auth2', start)

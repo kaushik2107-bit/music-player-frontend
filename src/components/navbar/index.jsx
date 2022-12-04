@@ -2,6 +2,7 @@ import { HiHome } from "react-icons/hi"
 import { AiFillHeart } from "react-icons/ai"
 import { MdAddBox } from "react-icons/md"
 import { useState } from "react"
+import LogoutButton from "../login/logout"
 
 export default function Navbar() {
   const [state, setState] = useState(1)
@@ -14,7 +15,7 @@ export default function Navbar() {
       </ul>
       <div className="border-t-[1px] border-[#777] my-2 m-auto w-[90%]" />
       <p className="px-4 text-[15px] text-[#555]">Your Playlists</p>
-
+      <LogoutButton />
     </div>
   )
 }

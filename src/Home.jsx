@@ -13,7 +13,7 @@ function Home() {
   })
 
   const fetchLatestSongs = async () => {
-    const url = "https://music-player-c3g1.onrender.com/latest"
+    const url = "https://musicplayer-production-5463.up.railway.app/latest"
     const result = await axios.get(url)
     setLatestSongs(prev => ({...prev, image: result.data.image_id, track: result.data.track_id, fileName: result.data.file_name}))
   }
@@ -40,7 +40,7 @@ function Home() {
 
   async function fetchData() {
     try {
-      const url = "https://music-player-c3g1.onrender.com/api/" + search
+      const url = "https://musicplayer-production-5463.up.railway.app/api/" + search
       const result = await axios.get(url)
       setImage(result.data.image_id)
       setTrack(result.data.track_id)

@@ -6,7 +6,8 @@ export default function Logout({ setUserName }) {
 
 	const onSuccess = () => {
 		console.log("Log out successfully");
-		setUserName()
+		// setUserName()
+		window.location = "/login"
 	}
 
 	return (
