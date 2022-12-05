@@ -29,7 +29,7 @@ export default function Liked({ setAudioData, setPlay }) {
         {
           likedSongs.map((item, index) => {
             return (
-              <div className="flex bg-[#222] rounded-lg p-2 items-center gap-4 justify-around px-2">
+              <div key={index} className="flex bg-[#222] rounded-lg p-2 items-center gap-4 justify-around px-2">
                 <img src={item.image} className="rounded-md w-[50px] h-[50px]" />
                 <p className="flex-1 text-white">{item.fileName}</p>
                 <button className="text-green-600 text-[35px]" onClick={() => handleClick(item.image, item.track, item.fileName)}><BsPlayFill /></button>

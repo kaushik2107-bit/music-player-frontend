@@ -21,7 +21,10 @@ export default function Login({ setStatus }) {
   })
 
   return (
-    <>
+    <div className="w-full flex justify-center items-center flex-col">
+      <div className="m-2 absolute top-8 text-[16px] max-w-[500px] text-center font-extrabold bg-green-500 p-2 rounded-xl text-[#eee]">
+        Sorry, we do not support any other ways to sign in just yet!
+      </div>
       {userName ?
         <LogoutButton
           setUserName={setUserName}
@@ -31,7 +34,7 @@ export default function Login({ setStatus }) {
           setUserName={setUserName}
         />
       }
-    </>
+    </div>
   )
 }
 

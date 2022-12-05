@@ -12,11 +12,14 @@ export default function Logout({ setUserName }) {
 	}
 
 	return (
-		<div id="signOutButton">
+		<div id="signOutButton" className="cursor-pointer">
 			<GoogleLogout
 				clientId={clientId}
 				buttonText="Logout"
 				onLogoutSuccess={onSuccess}
+				render={renderProps => (
+						<button onClick={renderProps.onClick} className="text-red-600 text-[14px] cursor-pointer" >Logout</button>
+				)}
 			/>
 		</div>
 	)

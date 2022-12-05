@@ -1,6 +1,7 @@
 import { GoogleLogin } from "react-google-login"
 import { useState, useEffect } from "react"
 import axios from "axios"
+import GoogleButton from 'react-google-button'
 
 const clientId = "814240228633-17qg9i62sljgr64e30jbr585fug81rpj.apps.googleusercontent.com"
 
@@ -35,6 +36,11 @@ export default function Login({ setUserName }) {
 				onFailure={onFailure}
 				cookiePolicy={'signle_host_origin'}
 				isSignedIn={true}
+				render={renderProps => (
+					<GoogleButton
+					  onClick={renderProps.onClick}
+					/>
+				)}
 			/>
 		</div>
 	)

@@ -9,7 +9,7 @@ function App() {
   return (
     <div className="bg-[#333] w-[100vw] h-[100vh] flex "  >
       <Routes>
-        <Route exact path="/" element={state ? <Home /> : <Navigate to="/login" />} />
+        <Route exact path="/" element={localStorage.getItem("muzic") || state ? <Home /> : <Navigate to="/login" />} />
         <Route exact path="/login" element={state ? <Navigate to="/" /> : <Login setStatus={setState} />} />
       </Routes>
     </div>

@@ -2,11 +2,16 @@ import axios from "axios"
 import { useState, useEffect, useRef } from "react"
 import AudioPlayer from "./components/audioPlayer/index"
 import { BsPlayFill } from "react-icons/bs"
+import { FaChevronDown } from "react-icons/fa"
 import logo from "./assets/logo.png"
 import Navbar from "./components/navbar/index"
 import Liked from "./components/liked/index"
 import NewPlaylist from "./components/newPlaylist/index"
 import DisplayPlaylist from "./components/displayPlaylist/index"
+import LogoutButton from "./components/login/logout"
+
+const check = localStorage.getItem("muzic")
+// if (!check) window.location = '/login'
 
 function Home() {
   const [latestSongs, setLatestSongs] = useState({
@@ -15,13 +20,26 @@ function Home() {
     fileName: []
   })
 
+  const [likedSongs, setLikedSongs] = useState([])
+
   const fetchLatestSongs = async () => {
     const url = "https://musicplayer-production-5463.up.railway.app/latest"
     const result = await axios.get(url)
     setLatestSongs(prev => ({...prev, image: result.data.image_id, track: result.data.track_id, fileName: result.data.file_name}))
   }
 
-  useEffect(() => {fetchLatestSongs()}, [])
+  const fetchLikedSongs = async () => {
+    const url = "https://musicplayer-production-5463.up.railway.app/fetchlike"
+    const result = await axios.post(url, {email: JSON.parse(localStorage.getItem("muzic"))?.email})
+    setLikedSongs(prev => (result.data.data))
+  }
+
+  useEffect(() => {
+    fetchLatestSongs();
+    if (JSON.parse(localStorage.getItem("muzic"))) {
+      setTimeout(fetchLikedSongs, 5000)
+    }
+  }, [])
 
   const [focus, setFocus] = useState(false)
 
@@ -76,7 +94,7 @@ function Home() {
   const HomeComponent = () => {
     return (
       <>
-        <div className="m-2 p-2 text-[18px] font-normal text-[#ddd]">
+        <div className="m-[1px] px-4 text-[#ccc] font-bold text-[24px]">
           Recently Added
         </div>
         <div className="m-2 p-2 flex overflow-hidden flex-wrap gap-4 h-[240px]">
@@ -95,11 +113,36 @@ function Home() {
             })
           }
         </div>
+        <div className="m-[1px] px-4 text-[#ccc] font-bold text-[24px]">
+          Some Liked Songs
+        </div>
+        <div className="m-2 p-2 flex overflow-hidden flex-wrap gap-4 h-[240px]">
+          {
+            likedSongs.map((item, index) => {
+              return (
+                <div className="w-[220px] h-[220px] bg-cover bg-center" style={{backgroundImage: `url(${item.image})`}} key={index}>
+                  <div className="relative bg-gradient-to-b from-transparent to-black w-[220px] h-[220px] flex items-end">
+                    <div className="flex justify-between items-center w-[100%] mb-[10px] px-2 gap-4">
+                      <p className="w-[150px] text-white text-[12px] bottom-[10px] left-[10px] truncate ">{item.fileName}</p>
+                      <button className="text-white bg-green-700 rounded-[50%] flex justify-center items-center w-[30px] h-[30px]" onClick={() => fetchTrack(item.image, item.track, item.fileName)}><BsPlayFill /></button>
+                    </div>
+                  </div>
+                </div>
+              )
+            })
+          }
+        </div>
       </>
     )
   }
   const [playData, setPlayData] = useState({})
   const [navLink, setNavLink] = useState(1)
+  const [showhideState, setShowhideState] = useState(false)
+
+  const showhide = () => {
+    setShowhideState(prev => !prev)
+  }
+
   return (
     <div className="bg-[#333] w-[100vw] h-[calc(100vh-150px)] flex "  >
       <div className="w-[250px] bg-[#111] h-[100%]">
@@ -137,7 +180,14 @@ function Home() {
           </div>
           <div className="flex-1 flex justify-end items-center p-2 px-4">
             <p className="text-[#bbb] text-[15px] font-bold">Hello, {JSON.parse(localStorage.getItem("muzic")) && JSON.parse(localStorage.getItem("muzic")).name.split(" ")[0]} </p>
-            <div className="w-[30px] h-[30px] bg-cover bg-center rounded-[50%] mx-2" style={{backgroundImage: `url(${JSON.parse(localStorage.getItem("muzic")).profilePic})`}} referrerPolicy="no-referrer" />
+            <div className="w-[30px] h-[30px] bg-cover bg-center rounded-[50%] mx-2" style={{backgroundImage: `url(${JSON.parse(localStorage.getItem("muzic")) && JSON.parse(localStorage.getItem("muzic")).profilePic})`}} referrerPolicy="no-referrer" />
+            <div className="">
+              <div className="cursor-pointer" onClick={showhide}><FaChevronDown /></div>
+              <ul className="absolute right-6 mt-4 w-[150px] text-[14px] bg-[#222] text-[#555]" style={ showhideState ? {} : {display: "none"}}>
+                <li className="border-b-[1px] border-gray-500 p-2 hover:text-[#999] cursor-pointer" >Your Profile</li>
+                <li className="border-b-[0px] border-gray-500 p-2 hover:text-[#999] cursor-pointer" ><LogoutButton /></li>
+              </ul>
+            </div>
           </div>
         </div>
 

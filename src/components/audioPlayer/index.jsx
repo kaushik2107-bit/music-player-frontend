@@ -94,10 +94,9 @@ export default function AudioPlayer(props) {
 
   const fetchLike = async() => {
     const check = await axios.post('https://musicplayer-production-5463.up.railway.app/islike', {
-      email: JSON.parse(localStorage.getItem("muzic")).email,
+      email: JSON.parse(localStorage.getItem("muzic"))?.email,
       ...props.data
     })
-    console.log(props.data)
     setIsLiked(prev => check.data.check)
   }
 

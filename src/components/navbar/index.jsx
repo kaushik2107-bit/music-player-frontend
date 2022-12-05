@@ -10,7 +10,7 @@ export default function Navbar({ setNavLink, setPlayData }) {
   const [playlist, setPlaylist] = useState([])
 
   const fetchPlaylists = async() => {
-    const res = await axios.post("https://musicplayer-production-5463.up.railway.app/fetchplaylist", {email: JSON.parse(localStorage.getItem("muzic")).email})
+    const res = await axios.post("https://musicplayer-production-5463.up.railway.app/fetchplaylist", {email: JSON.parse(localStorage.getItem("muzic"))?.email})
     setPlaylist(res.data.data)
   }
 
